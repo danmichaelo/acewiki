@@ -86,17 +86,10 @@ context.fn = $.extend( context.fn, {
 			}
 		};
 		
-		var fontsize10 = function( context ) {
-		    context.aceWikiEditor.setFontSize("10px");
-		    console.log(context);
-		};
-		var fontsize12 = function( context ) {
-		    context.aceWikiEditor.setFontSize("12px");
-		    console.log(context);
-		};
-		var fontsize14 = function( context ) {
-		    context.aceWikiEditor.setFontSize("14px");
-		    console.log(context);
+		var setFontSize = function (context, size) {		
+		    if (context.aceWikiEditor) {
+		        context.aceWikiEditor.setFontSize(size);
+		    }
 		};
 		
 		context.api.addToToolbar( context, {
@@ -130,7 +123,9 @@ context.fn = $.extend( context.fn, {
                             'label': '10px',
                             'action': {
                                 'type': 'callback',
-                                'execute': fontsize10
+                                'execute': function(context) {
+                                    setFontSize(context, '10px');
+                                }
                             }
                         },
                         'fontsize-12' : {
@@ -138,7 +133,9 @@ context.fn = $.extend( context.fn, {
                             'label': '12px',
                             'action': {
                                 'type': 'callback',
-                                'execute': fontsize12
+                                'execute': function(context) {
+                                    setFontSize(context, '12px');
+                                }
                             }
                         },
                         'fontsize-14' : {
@@ -146,7 +143,9 @@ context.fn = $.extend( context.fn, {
                             'label': '14px',
                             'action': {
                                 'type': 'callback',
-                                'execute': fontsize14
+                                'execute': function(context) {
+                                    setFontSize(context, '14px');
+                                }
                             }
                         }
                     }
