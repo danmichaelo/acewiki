@@ -161,7 +161,9 @@ context.fn = $.extend( context.fn, {
 			];
 			box.closest('form').submit( context.evt.codeEditorSubmit );
 			context.codeEditor.getSession().setMode(new (ace.require("ace/mode/" + lang).Mode));
-			context.codeEditor.setTheme(new (ace.require("ace/theme/" + lang).Mode));
+			console.log(context)
+			console.log(console.codeEditor)
+			context.codeEditor.setTheme("ace/theme/" + lang);
 
 			// Force the box to resize horizontally to match in future :D
 			var resize = function() {
