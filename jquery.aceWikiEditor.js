@@ -94,14 +94,17 @@ context.fn = $.extend( context.fn, {
 		    context.aceWikiEditor.setFontSize("12px");
 		    console.log(context);
 		};
+		var fontsize14 = function( context ) {
+		    context.aceWikiEditor.setFontSize("14px");
+		    console.log(context);
+		};
 		
 		context.api.addToToolbar( context, {
 			'section': 'main',
 			'group': 'format',
 			'tools': {
 				'aceWikiEditor': {
-					// Localization: 'labelMsg': 'acewikieditor-toolbar-toggle',
-					'label': 'Fontstørrelse',
+					'labelMsg': 'acewikieditor-toolbar-toggle',
 					'type': 'button',
 					'icon': context.fn.aceWikiEditorToolbarIcon(),
 					'action': {
@@ -118,7 +121,8 @@ context.fn = $.extend( context.fn, {
 		    'tools': {
 		
                 'fontsize': {
-                    'labelMsg': 'acewikieditor-toolbar-fontsize',
+                    //'labelMsg': 'acewikieditor-toolbar-fontsize',
+                    'label': 'Fontstørrelse',
                     'type': 'select',
                     'list': {
                         'fontsize-2' : {
@@ -135,6 +139,14 @@ context.fn = $.extend( context.fn, {
                             'action': {
                                 'type': 'callback',
                                 'execute': fontsize12
+                            }
+                        },
+                        'fontsize-3' : {
+                            //'labelMsg': 'acewikieditor-toolbar-14px',
+                            'label': '14px',
+                            'action': {
+                                'type': 'callback',
+                                'execute': fontsize14
                             }
                         }
                     }
