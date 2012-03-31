@@ -1,5 +1,5 @@
 /*jslint browser: true, white: true*/
-/*global mediaWiki, jQuery, ace, wgTitle*/
+/*global mediaWiki, jQuery, ace */
 
 /* Ace syntax-highlighting code editor extension for wikiEditor */
 
@@ -85,6 +85,14 @@ context.fn = $.extend( context.fn, {
 				context.fn.disableAceWikiEditor();
 			}
 		};
+		
+		var fontsize2 = function( context ) {
+		    console.log(context);
+		};
+		var fontsize3 = function( context ) {
+		    console.log(context);
+		};
+		
 		context.api.addToToolbar( context, {
 			'section': 'main',
 			'group': 'format',
@@ -100,6 +108,36 @@ context.fn = $.extend( context.fn, {
 				}
 			}
 		});
+		
+		context.api.addToToolbar( context, {
+		    'section': 'main',
+		    'group': 'format',
+		    'tools': {
+		
+                'fontsize': {
+                    'labelMsg': 'wikieditor-toolbar-tool-fontsize',
+                    'type': 'select',
+                    'list': {
+                        'fontsize-2' : {
+                            'labelMsg': 'wikieditor-toolbar-tool-fontsize-2',
+                            'action': {
+                                'type': 'callback',
+                                'execute': fontsize2
+                            }
+                        },
+                        'fontsize-3' : {
+                            'labelMsg': 'wikieditor-toolbar-tool-fontsize-3',
+                            'action': {
+                                'type': 'callback',
+                                'execute': fontsize3
+                            }
+                        }
+                    }
+                }
+            }
+        })
+                
+		
 	},
 	'toggleAceWikiEditorToolbar': function() {
 		var target = 'img.tool[rel=aceWikiEditor]';
@@ -112,7 +150,7 @@ context.fn = $.extend( context.fn, {
 	'setupAceWikiEditor': function() {
 		var box = context.$textarea;
 
-		var matches = /\.(js|css)$/.exec(wgTitle);
+		var matches = /\.(js|css)$/.exec(mw.config.get('wgTitle'));
 		if (!matches) {
 			var lang = 'wiki';
 
