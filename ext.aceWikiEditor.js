@@ -15,18 +15,20 @@
  *
  * Browsers tested with issues:
  * - Opera 12.00 alpha / Mac: copy / paste doesn't work
- * - IE 8.0.6001.18702 / Win XP: not tested, but don't expect it to work. 
-     Be veeery careful as data corruption may occur!!
- * - Safari: renders ok, but can't type "}" :D 
+ * - Safari: renders ok, but for some funny reason you can't type "}"
+ *   Same problem at http://ace.ajax.org/build/kitchen-sink.html 
+ * 
+ * Browsers not tested:
+ * - IE 8.0.6001.18702 / Win XP: Problems have been reported with
+ *   Brion's CodeEditor, so problems should be expected!
  *
- * Known issues (from Brions CodeEditor):
- * - extension version doesn't have optional bits correct
+ * Known issues:
+ * - serious problems with right-to-left scripts and perhaps other complex scripts. 
+ * - 'discard your changes?' check on tab close doesn't trigger
  * - ties into WikiEditor, so doesn't work on classic toolbar
  * - copy/paste not available from context menu (Firefox, Chrome on Linux -- kbd & main menu commands ok)
  * - accessibility: tab/shift-tab are overridden. is there a consistent alternative for keyboard-reliant users?
  * - accessibility: accesskey on the original textarea needs to be moved over or otherwise handled
- * - 'discard your changes?' check on tab close doesn't trigger
- * - scrollbar initializes too wide; need to trigger resize check after that's filled
  * - cursor/scroll position not maintained over previews/show changes
  *
  */
