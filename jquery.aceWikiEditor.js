@@ -112,6 +112,7 @@ context.fn = $.extend( context.fn, {
 	'setupAceWikiEditor': function() {
 		var box = context.$textarea;
 
+		console.log(context);
 		var matches = /\.(js|css)$/.exec(context.getTitle());
 		if (!matches) {
 			var lang = 'wiki';
