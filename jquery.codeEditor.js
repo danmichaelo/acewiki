@@ -138,7 +138,7 @@ context.fn = $.extend( context.fn, {
 
 			// Disable some annoying commands
 			// This doesn't seem to work; filed as https://github.com/ajaxorg/ace/issues/294
-			var canon = require('pilot/canon');
+			var canon = ace.require('pilot/canon');
 			//console.log(canon.getCommandNames());
 			canon.removeCommand('replace');          // ctrl+R
 			canon.removeCommand('transposeletters'); // ctrl+T
@@ -169,7 +169,7 @@ context.fn = $.extend( context.fn, {
 				}
 			];
 			box.closest('form').submit( context.evt.codeEditorSubmit );
-			context.codeEditor.getSession().setMode(new (require("ace/mode/" + lang).Mode));
+			context.codeEditor.getSession().setMode(new (ace.require("ace/mode/" + lang).Mode));
 
 			// Force the box to resize horizontally to match in future :D
 			var resize = function() {
