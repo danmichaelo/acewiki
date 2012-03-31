@@ -2,12 +2,12 @@
 
 ( function( $ ) {
 
-$.wikiEditor.modules.codeEditor = {
+$.wikiEditor.modules.aceWikiEditor = {
 
 /**
  * Core Requirements
  */
-'req': [ 'codeEditor' ],
+'req': [ 'aceWikiEditor' ],
 /**
  * Configuration
  */
@@ -34,7 +34,7 @@ fn: {
 
 };
 
-$.wikiEditor.extensions.codeEditor = function( context ) {
+$.wikiEditor.extensions.aceWikiEditor = function( context ) {
 
 /*
  * Event Handlers
@@ -60,24 +60,24 @@ context.evt = $.extend( context.evt, {
 	},
 	'ready': function( event ) {
 	},
-	'codeEditorSubmit': function( event ) {
+	'aceWikiEditorSubmit': function( event ) {
 		context.$textarea.val( context.$textarea.textSelection( 'getContents' ) );
 	}
 } );
 
-var cookieEnabled = $.cookie('wikiEditor-' + context.instance + '-codeEditor-enabled');
-context.codeEditorActive = (cookieEnabled != '0');
+var cookieEnabled = $.cookie('wikiEditor-' + context.instance + '-aceWikiEditor-enabled');
+context.aceWikiEditorActive = (cookieEnabled != '0');
 
 /**
  * Internally used functions
  */
 context.fn = $.extend( context.fn, {
-	'codeEditorToolbarIcon': function() {
+	'aceWikiEditorToolbarIcon': function() {
 		// When loaded as a gadget, one may need to override the wiki's own assets path.
-		var iconPath = mw.config.get('wgCodeEditorAssetsPath', mw.config.get('wgExtensionAssetsPath')) + '/CodeEditor/images/';
-		return iconPath + (context.codeEditorActive ? 'code-selected.png' : 'code.png');
+		var iconPath = mw.config.get('wgAceWikiEditorAssetsPath', mw.config.get('wgExtensionAssetsPath')) + '/AceWikiEditor/images/';
+		return iconPath + (context.AceWikiEditorActive ? 'code-selected.png' : 'code.png');
 	},
-	'setupCodeEditorToolbar': function() {
+	'setupAceWikiEditorToolbar': function() {
 		// Drop out some formatting that isn't relevant on these pages...
 		context.api.removeFromToolbar(context, {
 			'section': 'main',
@@ -90,29 +90,29 @@ context.fn = $.extend( context.fn, {
 			'tool': 'italic'
 		});
 		var callback = function( context ) {
-			context.codeEditorActive = !context.codeEditorActive;
+			context.aceWikiEditorActive = !context.aceWikiEditorActive;
 			$.cookie(
-				'wikiEditor-' + context.instance + '-codeEditor-enabled',
-				context.codeEditorActive ? 1 : 0,
+				'wikiEditor-' + context.instance + '-aceWikiEditor-enabled',
+				context.aceWikiEditorActive ? 1 : 0,
 				{ expires: 30, path: '/' }
 			);
-			context.fn.toggleCodeEditorToolbar();
+			context.fn.toggleAceWikiEditorToolbar();
 
-			if (context.codeEditorActive) {
+			if (context.aceWikiEditorActive) {
 				// set it back up!
-				context.fn.setupCodeEditor();
+				context.fn.setupAceWikiEditor();
 			} else {
-				context.fn.disableCodeEditor();
+				context.fn.disableAceWikiEditor();
 			}
 		}
 		context.api.addToToolbar( context, {
 			'section': 'main',
 			'group': 'format',
 			'tools': {
-				'codeEditor': {
+				'aceWikiEditor': {
 					'labelMsg': 'codeeditor-toolbar-toggle',
 					'type': 'button',
-					'icon': context.fn.codeEditorToolbarIcon(),
+					'icon': context.fn.aceWikiEditorToolbarIcon(),
 					'action': {
 						'type': 'callback',
 						'execute': callback
@@ -121,15 +121,15 @@ context.fn = $.extend( context.fn, {
 			}
 		} );
 	},
-	'toggleCodeEditorToolbar': function() {
-		var target = 'img.tool[rel=codeEditor]';
+	'toggleAceWikiEditorToolbar': function() {
+		var target = 'img.tool[rel=aceWikiEditor]';
 		var $img = context.modules.toolbar.$toolbar.find( target );
-		$img.attr('src', context.fn.codeEditorToolbarIcon());
+		$img.attr('src', context.fn.aceWikiEditorToolbarIcon());
 	},
 	/**
 	 * Sets up the iframe in place of the textarea to allow more advanced operations
 	 */
-	'setupCodeEditor': function() {
+	'setupAceWikiEditor': function() {
 		var box = context.$textarea;
 
 		var matches = /\.(js|css)$/.exec(wgTitle);
@@ -139,7 +139,7 @@ context.fn = $.extend( context.fn, {
 			// Ace doesn't like replacing a textarea directly.
 			// We'll stub this out to sit on top of it...
 			// line-height is needed to compensate for oddity in WikiEditor extension, which zeroes the line-height on a parent container
-			var container = context.$codeEditorContainer = $('<div style="position: relative"><div class="editor" style="line-height: 1.5em; top: 0px; left: 0px; right: 0px; bottom: 0px; border: 1px solid gray"></div></div>').insertAfter(box);
+			var container = context.$aceWikiEditorContainer = $('<div style="position: relative"><div class="editor" style="line-height: 1.5em; top: 0px; left: 0px; right: 0px; bottom: 0px; border: 1px solid gray"></div></div>').insertAfter(box);
 			var editdiv = container.find('.editor');
 
 			box.css('display', 'none');
@@ -147,25 +147,27 @@ context.fn = $.extend( context.fn, {
 					 .height(box.height());
 
 			editdiv.text(box.val());
-			context.codeEditor = ace.edit(editdiv[0]);
+			context.aceWikiEditor = ace.edit(editdiv[0]);
 
 			// fakeout for bug 29328
 			context.$iframe = [
 				{
 					contentWindow: {
 						focus: function() {
-							context.codeEditor.focus();
+							context.aceWikiEditor.focus();
 						}
 					}
 				}
 			];
-			box.closest('form').submit( context.evt.codeEditorSubmit );
-			context.codeEditor.getSession().setMode("ace/mode/" + lang);
-			context.codeEditor.setTheme("ace/theme/" + lang);
-            context.codeEditor.getSession().setUseWrapMode(true);
-            context.codeEditor.getSession().setWrapLimitRange(null, null); // auto
-            context.codeEditor.renderer.setShowPrintMargin(false);
-            context.codeEditor.renderer.setShowGutter(false)
+			box.closest('form').submit( context.evt.aceWikiEditorSubmit );
+			context.aceWikiEditor.getSession().setMode("ace/mode/" + lang);
+			context.aceWikiEditor.setTheme("ace/theme/" + lang);
+            context.aceWikiEditor.getSession().setUseWrapMode(true);
+            context.aceWikiEditor.getSession().setWrapLimitRange(null, null); // auto
+            context.aceWikiEditor.renderer.setShowPrintMargin(false);
+            context.aceWikiEditor.renderer.setShowGutter(false)
+            context.aceWikiEditor.getSession().setScrollLeft(false);
+
 			// Force the box to resize horizontally to match in future :D
 			var resize = function() {
 				container.width(box.width());
@@ -176,14 +178,14 @@ context.fn = $.extend( context.fn, {
 				handles: 's',
 				minHeight: box.height(),
 				resize: function() {
-					context.codeEditor.resize();
+					context.aceWikiEditor.resize();
 				}
 			});
 
-			var summary = $('#wpSummary');
-			if (summary.val() == '') {
-				summary.val('/* using [[mw:CodeEditor|CodeEditor]] */ ');
-			}
+			//var summary = $('#wpSummary');
+			//if (summary.val() == '') {
+		    //	 summary.val('/* using [[mw:AceWikiEditor|AceWikiEditor]] */ ');
+			//}
 			// Let modules know we're ready to start working with the content
 			context.fn.trigger( 'ready' );
 		}
@@ -193,9 +195,9 @@ context.fn = $.extend( context.fn, {
 	 *  Turn off the code editor view and return to the plain textarea.
 	 * May be needed by some folks with funky browsers, or just to compare.
 	 */
-	'disableCodeEditor': function() {
+	'disableAceWikiEditor': function() {
 		// Kills it!
-		context.$textarea.closest('form').unbind('submit', context.evt.onCodeEditorSubmit );
+		context.$textarea.closest('form').unbind('submit', context.evt.onAceWikiEditorSubmit );
 
 		// Save contents
 		context.$textarea.val(context.fn.getContents());
@@ -203,10 +205,10 @@ context.fn = $.extend( context.fn, {
 		// @todo fetch cursor, scroll position
 
 		// Drop the fancy editor widget...
-		context.$codeEditorContainer.remove();
-		context.$codeEditorContainer = undefined;
+		context.$aceWikiEditorContainer.remove();
+		context.$aceWikiEditorContainer = undefined;
 		context.$iframe = undefined;
-		context.codeEditor = undefined;
+		context.aceWikiEditor = undefined;
 
 		// Restore textarea
 		context.$textarea.show();
@@ -233,12 +235,12 @@ var saveAndExtend = function( base, extended ) {
 		if ( name in base ) {
 			var orig = base[name];
 			base[name] = function() {
-				if (context.codeEditorActive) {
+				if (context.aceWikiEditorActive) {
 					return func.apply(this, arguments);
 				} else if (orig) {
 					return orig.apply(this, arguments);
 				} else {
-					throw new Error('CodeEditor: no original function to call for ' + name);
+					throw new Error('AceWikiEditor: no original function to call for ' + name);
 				}
 			}
 		} else {
@@ -257,15 +259,15 @@ saveAndExtend( context.fn, {
 		return;
 	},
 	'saveSelection': function() {
-		mw.log('codeEditor stub function saveSelection called');
+		mw.log('aceWikiEditor stub function saveSelection called');
 	},
 	'restoreSelection': function() {
-		mw.log('codeEditor stub function restoreSelection called');
+		mw.log('aceWikiEditor stub function restoreSelection called');
 	},
 
 	/* Needed for search/replace */
 	'getContents': function() {
-		return context.codeEditor.getSession().getValue();
+		return context.aceWikiEditor.getSession().getValue();
 	},
 
 	/*
@@ -274,7 +276,7 @@ saveAndExtend( context.fn, {
 	 */
 
 	'getElementAtCursor': function() {
-		mw.log('codeEditor stub function getElementAtCursor called');
+		mw.log('aceWikiEditor stub function getElementAtCursor called');
 	},
 
 	/**
@@ -282,7 +284,7 @@ saveAndExtend( context.fn, {
 	 * DO NOT CALL THIS DIRECTLY, use $.textSelection( 'functionname', options ) instead
 	 */
 	'getSelection': function() {
-		return context.codeEditor.getCopyText();
+		return context.aceWikiEditor.getCopyText();
 	},
 	/**
 	 * Inserts text at the begining and end of a text selection, optionally inserting text at the caret when
@@ -291,7 +293,7 @@ saveAndExtend( context.fn, {
 	 */
 	'encapsulateSelection': function( options ) {
 		// Does not yet handle 'ownline', 'splitlines' option
-		var sel = context.codeEditor.getSelection();
+		var sel = context.aceWikiEditor.getSelection();
 		var range = sel.getRange();
 		var selText = context.fn.getSelection();
 		var isSample = false;
@@ -304,7 +306,7 @@ saveAndExtend( context.fn, {
 		var text = options.pre;
 		text += selText;
 		text += options.post;
-		context.codeEditor.insert( text );
+		context.aceWikiEditor.insert( text );
 		if ( isSample && options.selectPeri && !options.splitlines ) {
 			// May esplode if anything has newlines, be warned. :)
 			range.setStart( range.start.row, range.start.column + options.pre.length );
@@ -318,7 +320,7 @@ saveAndExtend( context.fn, {
 	 * DO NOT CALL THIS DIRECTLY, use $.textSelection( 'functionname', options ) instead
 	 */
 	'getCaretPosition': function( options ) {
-		mw.log('codeEditor stub function getCaretPosition called');
+		mw.log('aceWikiEditor stub function getCaretPosition called');
 	},
 	/**
 	 * Sets the selection of the content
@@ -332,7 +334,7 @@ saveAndExtend( context.fn, {
 	'setSelection': function( options ) {
 		// Ace stores positions for ranges as row/column pairs.
 		// To convert from character offsets, we'll need to iterate through the document
-		var doc = context.codeEditor.getSession().getDocument();
+		var doc = context.aceWikiEditor.getSession().getDocument();
 		var lines = doc.getAllLines();
 
 		var offsetToPos = function( offset ) {
@@ -349,7 +351,7 @@ saveAndExtend( context.fn, {
 		var start = offsetToPos( options.start ),
 			end = offsetToPos( options.end );
 
-		var sel = context.codeEditor.getSelection();
+		var sel = context.aceWikiEditor.getSelection();
 		var range = sel.getRange();
 		range.setStart( start.row, start.column );
 		range.setEnd( end.row, end.column );
@@ -361,7 +363,7 @@ saveAndExtend( context.fn, {
 	 * DO NOT CALL THIS DIRECTLY, use $.textSelection( 'functionname', options ) instead
 	 */
 	'scrollToCaretPosition': function( options ) {
-		mw.log('codeEditor stub function scrollToCaretPosition called');
+		mw.log('aceWikiEditor stub function scrollToCaretPosition called');
 		return context.$textarea;
 	},
 	/**
@@ -372,14 +374,14 @@ saveAndExtend( context.fn, {
 	 * @param force If true, scroll the element even if it's already visible
 	 */
 	'scrollToTop': function( $element, force ) {
-		mw.log('codeEditor stub function scrollToTop called');
+		mw.log('aceWikiEditor stub function scrollToTop called');
 	}
 } );
 
 /* Setup the editor */
-context.fn.setupCodeEditorToolbar();
-if (context.codeEditorActive) {
-	context.fn.setupCodeEditor();
+context.fn.setupAceWikiEditorToolbar();
+if (context.aceWikiEditorActive) {
+	context.fn.setupAceWikiEditor();
 }
 
 } } )( jQuery );
