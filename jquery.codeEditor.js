@@ -162,7 +162,10 @@ context.fn = $.extend( context.fn, {
 			box.closest('form').submit( context.evt.codeEditorSubmit );
 			context.codeEditor.getSession().setMode("ace/mode/" + lang);
 			context.codeEditor.setTheme("ace/theme/" + lang);
-
+            context.codeEditor.getSession().setUseWrapMode(true);
+            context.codeEditor.getSession().setWrapLimitRange(null, null); // auto
+            context.codeEditor.renderer.setShowPrintMargin(false);
+            context.codeEditor.renderer.setShowGutter(false)
 			// Force the box to resize horizontally to match in future :D
 			var resize = function() {
 				container.width(box.width());
