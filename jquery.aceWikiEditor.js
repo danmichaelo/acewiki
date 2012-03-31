@@ -125,7 +125,7 @@ context.fn = $.extend( context.fn, {
                     'label': 'Fontstørrelse',
                     'type': 'select',
                     'list': {
-                        'fontsize-2' : {
+                        'fontsize-10' : {
                             //'labelMsg': 'acewikieditor-toolbar-10px',
                             'label': '10px',
                             'action': {
@@ -133,7 +133,7 @@ context.fn = $.extend( context.fn, {
                                 'execute': fontsize10
                             }
                         },
-                        'fontsize-3' : {
+                        'fontsize-12' : {
                             //'labelMsg': 'acewikieditor-toolbar-12px',
                             'label': '12px',
                             'action': {
@@ -141,7 +141,7 @@ context.fn = $.extend( context.fn, {
                                 'execute': fontsize12
                             }
                         },
-                        'fontsize-3' : {
+                        'fontsize-14' : {
                             //'labelMsg': 'acewikieditor-toolbar-14px',
                             'label': '14px',
                             'action': {
