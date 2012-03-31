@@ -56,7 +56,9 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 regex: "^==.*==\\s*$"
             }, {
                 token : "meta.tag",
-                regex : "<.*?>"
+                regex : "<ref.*?>",
+                merge : true,
+                next : "ref"
             }, {
                 token : "table",
                 merge : true,
@@ -72,6 +74,16 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 token : "wikilinkbraces",
                 regex : "\\[\\[",
                 next : "wikilink"
+            }],
+        ref : [
+         {
+                token : "meta.tag",
+                regex : ".*</ref>",
+                next : "start"
+            }, {
+                token : "meta.tag",
+                merge : true,
+                regex : ".+"
             }],
         wikilink : [
          {
