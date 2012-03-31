@@ -74,7 +74,7 @@ context.aceWikiEditorActive = (cookieEnabled != '0');
 context.fn = $.extend( context.fn, {
 	'aceWikiEditorToolbarIcon': function() {
 		// When loaded as a gadget, one may need to override the wiki's own assets path.
-		var iconPath = mw.config.get('wgAceWikiEditorAssetsPath', mw.config.get('wgExtensionAssetsPath')) + '/AceWikiEditor/images/';
+		var iconPath = mw.config.get('wgAceWikiEditorAssetsPath', mw.config.get('wgExtensionAssetsPath')) + '/images/';
 		return iconPath + (context.AceWikiEditorActive ? 'code-selected.png' : 'code.png');
 	},
 	'setupAceWikiEditorToolbar': function() {
