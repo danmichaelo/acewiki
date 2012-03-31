@@ -56,6 +56,9 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 regex: "^==.*==\\s*$"
             }, {
                 token : "meta.tag",
+                regex : "<ref.*?/>",
+            }, {
+                token : "meta.tag",
                 regex : "<ref.*?>",
                 merge : true,
                 next : "ref"
