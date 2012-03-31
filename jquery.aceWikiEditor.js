@@ -75,7 +75,7 @@ context.fn = $.extend( context.fn, {
 	'aceWikiEditorToolbarIcon': function() {
 		// When loaded as a gadget, one may need to override the wiki's own assets path.
 		var iconPath = mw.config.get('wgAceWikiEditorAssetsPath', mw.config.get('wgExtensionAssetsPath')) + '/images/';
-		return iconPath + (context.AceWikiEditorActive ? 'code-selected.png' : 'code.png');
+		return iconPath + (context.aceWikiEditorActive ? 'code-selected.png' : 'code.png');
 	},
 	'setupAceWikiEditorToolbar': function() {
 		// Drop out some formatting that isn't relevant on these pages...
@@ -166,7 +166,7 @@ context.fn = $.extend( context.fn, {
             context.aceWikiEditor.getSession().setWrapLimitRange(null, null); // auto
             context.aceWikiEditor.renderer.setShowPrintMargin(false);
             context.aceWikiEditor.renderer.setShowGutter(false)
-            context.aceWikiEditor.getSession().setScrollLeft(false);
+            context.aceWikiEditor.renderer.setHScrollBarAlwaysVisible(false);
 
 			// Force the box to resize horizontally to match in future :D
 			var resize = function() {
