@@ -86,10 +86,12 @@ context.fn = $.extend( context.fn, {
 			}
 		};
 		
-		var fontsize2 = function( context ) {
+		var fontsize10 = function( context ) {
+		    context.aceWikiEditor.setFontSize("10px");
 		    console.log(context);
 		};
-		var fontsize3 = function( context ) {
+		var fontsize12 = function( context ) {
+		    context.aceWikiEditor.setFontSize("12px");
 		    console.log(context);
 		};
 		
@@ -115,21 +117,21 @@ context.fn = $.extend( context.fn, {
 		    'tools': {
 		
                 'fontsize': {
-                    'labelMsg': 'wikieditor-toolbar-tool-fontsize',
+                    'labelMsg': '12px',
                     'type': 'select',
                     'list': {
                         'fontsize-2' : {
-                            'labelMsg': 'wikieditor-toolbar-tool-fontsize-2',
+                            'labelMsg': '10px',
                             'action': {
                                 'type': 'callback',
-                                'execute': fontsize2
+                                'execute': fontsize10
                             }
                         },
                         'fontsize-3' : {
-                            'labelMsg': 'wikieditor-toolbar-tool-fontsize-3',
+                            'labelMsg': '12px',
                             'action': {
                                 'type': 'callback',
-                                'execute': fontsize3
+                                'execute': fontsize12
                             }
                         }
                     }
