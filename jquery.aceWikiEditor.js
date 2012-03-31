@@ -1,5 +1,5 @@
 /*jslint browser: true, white: true*/
-/*global mediaWiki, jQuery, ace*/
+/*global mediaWiki, jQuery, ace, wgTitle*/
 
 /* Ace syntax-highlighting code editor extension for wikiEditor */
 
@@ -112,8 +112,7 @@ context.fn = $.extend( context.fn, {
 	'setupAceWikiEditor': function() {
 		var box = context.$textarea;
 
-		console.log(context);
-		var matches = /\.(js|css)$/.exec(context.getTitle());
+		var matches = /\.(js|css)$/.exec(wgTitle);
 		if (!matches) {
 			var lang = 'wiki';
 
