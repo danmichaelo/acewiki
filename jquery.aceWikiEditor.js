@@ -100,7 +100,8 @@ context.fn = $.extend( context.fn, {
 			'group': 'format',
 			'tools': {
 				'aceWikiEditor': {
-					'labelMsg': 'codeeditor-toolbar-toggle',
+					// Localization: 'labelMsg': 'acewikieditor-toolbar-toggle',
+					'label': 'Fontstørrelse',
 					'type': 'button',
 					'icon': context.fn.aceWikiEditorToolbarIcon(),
 					'action': {
@@ -117,18 +118,20 @@ context.fn = $.extend( context.fn, {
 		    'tools': {
 		
                 'fontsize': {
-                    'labelMsg': '12px',
+                    'labelMsg': 'acewikieditor-toolbar-fontsize',
                     'type': 'select',
                     'list': {
                         'fontsize-2' : {
-                            'labelMsg': '10px',
+                            //'labelMsg': 'acewikieditor-toolbar-10px',
+                            'label': '10px',
                             'action': {
                                 'type': 'callback',
                                 'execute': fontsize10
                             }
                         },
                         'fontsize-3' : {
-                            'labelMsg': '12px',
+                            //'labelMsg': 'acewikieditor-toolbar-12px',
+                            'label': '12px',
                             'action': {
                                 'type': 'callback',
                                 'execute': fontsize12
