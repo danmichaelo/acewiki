@@ -1,6 +1,9 @@
+/*jslint browser: true, white: true*/
+/*global mediaWiki, jQuery, ace*/
+
 /* Ace syntax-highlighting code editor extension for wikiEditor */
 
-( function( $ ) {
+(function ( $, mw ) {
 
 $.wikiEditor.modules.aceWikiEditor = {
 
@@ -48,25 +51,13 @@ context.evt = $.extend( context.evt, {
 	 * function is to both classify the scope of changes as 'division' or 'character' and to prevent further
 	 * processing of events which did not actually change the content of the iframe.
 	 */
-	'keydown': function( event ) {
-	},
-	'change': function( event ) {
-	},
-	'delayedChange': function( event ) {
-	},
-	'cut': function( event ) {
-	},
-	'paste': function( event ) {
-	},
-	'ready': function( event ) {
-	},
 	'aceWikiEditorSubmit': function( event ) {
 		context.$textarea.val( context.$textarea.textSelection( 'getContents' ) );
 	}
 } );
 
 var cookieEnabled = $.cookie('wikiEditor-' + context.instance + '-aceWikiEditor-enabled');
-context.aceWikiEditorActive = (cookieEnabled != '0');
+context.aceWikiEditorActive = (cookieEnabled !== '0');
 
 /**
  * Internally used functions
@@ -78,22 +69,11 @@ context.fn = $.extend( context.fn, {
 		return iconPath + (context.aceWikiEditorActive ? 'code-selected.png' : 'code.png');
 	},
 	'setupAceWikiEditorToolbar': function() {
-		// Drop out some formatting that isn't relevant on these pages...
-		context.api.removeFromToolbar(context, {
-			'section': 'main',
-			'group': 'format',
-			'tool': 'bold'
-		});
-		context.api.removeFromToolbar(context, {
-			'section': 'main',
-			'group': 'format',
-			'tool': 'italic'
-		});
 		var callback = function( context ) {
 			context.aceWikiEditorActive = !context.aceWikiEditorActive;
 			$.cookie(
 				'wikiEditor-' + context.instance + '-aceWikiEditor-enabled',
-				context.aceWikiEditorActive ? 1 : 0,
+				context.aceWikiEditorActive ? '1' : '0',
 				{ expires: 30, path: '/' }
 			);
 			context.fn.toggleAceWikiEditorToolbar();
@@ -104,7 +84,7 @@ context.fn = $.extend( context.fn, {
 			} else {
 				context.fn.disableAceWikiEditor();
 			}
-		}
+		};
 		context.api.addToToolbar( context, {
 			'section': 'main',
 			'group': 'format',
@@ -119,7 +99,7 @@ context.fn = $.extend( context.fn, {
 					}
 				}
 			}
-		} );
+		});
 	},
 	'toggleAceWikiEditorToolbar': function() {
 		var target = 'img.tool[rel=aceWikiEditor]';
@@ -132,7 +112,7 @@ context.fn = $.extend( context.fn, {
 	'setupAceWikiEditor': function() {
 		var box = context.$textarea;
 
-		var matches = /\.(js|css)$/.exec(wgTitle);
+		var matches = /\.(js|css)$/.exec(context.getTitle());
 		if (!matches) {
 			var lang = 'wiki';
 
@@ -160,12 +140,14 @@ context.fn = $.extend( context.fn, {
 				}
 			];
 			box.closest('form').submit( context.evt.aceWikiEditorSubmit );
+			
+			// Configure Ace:
 			context.aceWikiEditor.getSession().setMode("ace/mode/" + lang);
 			context.aceWikiEditor.setTheme("ace/theme/" + lang);
             context.aceWikiEditor.getSession().setUseWrapMode(true);
             context.aceWikiEditor.getSession().setWrapLimitRange(null, null); // auto
             context.aceWikiEditor.renderer.setShowPrintMargin(false);
-            context.aceWikiEditor.renderer.setShowGutter(false)
+            context.aceWikiEditor.renderer.setShowGutter(false);
             context.aceWikiEditor.renderer.setHScrollBarAlwaysVisible(false);
 
 			// Force the box to resize horizontally to match in future :D
@@ -182,11 +164,6 @@ context.fn = $.extend( context.fn, {
 				}
 			});
 
-			//var summary = $('#wpSummary');
-			//if (summary.val() == '') {
-		    //	 summary.val('/* using [[mw:AceWikiEditor|AceWikiEditor]] */ ');
-			//}
-			// Let modules know we're ready to start working with the content
 			context.fn.trigger( 'ready' );
 		}
 	},
@@ -222,17 +199,18 @@ context.fn = $.extend( context.fn, {
  * us fall back to the originals when we turn off.
  */
 var saveAndExtend = function( base, extended ) {
-	var saved = {};
+	//var saved = {};
 	// $.map doesn't handle objects in jQuery < 1.6; need this for compat with MW 1.17
 	var map = function( obj, callback ) {
-		for (var key in extended ) {
+	    var key;
+		for ( key in extended ) {
 			if ( obj.hasOwnProperty( key ) ) {
 				callback( obj[key], key );
 			}
 		}
 	};
 	map( extended, function( func, name ) {
-		if ( name in base ) {
+		if (base.hasOwnProperty(name)) {
 			var orig = base[name];
 			base[name] = function() {
 				if (context.aceWikiEditorActive) {
@@ -242,7 +220,7 @@ var saveAndExtend = function( base, extended ) {
 				} else {
 					throw new Error('AceWikiEditor: no original function to call for ' + name);
 				}
-			}
+			};
 		} else {
 			base[name] = func;
 		}
@@ -347,7 +325,7 @@ saveAndExtend( context.fn, {
 			}
 			col = offset - pos;
 			return {row: row, column: col};
-		}
+		};
 		var start = offsetToPos( options.start ),
 			end = offsetToPos( options.end );
 
@@ -384,4 +362,6 @@ if (context.aceWikiEditorActive) {
 	context.fn.setupAceWikiEditor();
 }
 
-} } )( jQuery );
+};
+
+})( jQuery, mediaWiki );
