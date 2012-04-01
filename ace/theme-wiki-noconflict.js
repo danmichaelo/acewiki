@@ -130,7 +130,7 @@ exports.cssText = "\
 }\
 \
 .ace-wiki .ace_table {\
-  color:#F5871F;\
+  color:#80461B;\
 }\
 \
 .ace-wiki .ace_entity.ace_other.ace_attribute-name {\
