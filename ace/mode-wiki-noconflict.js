@@ -48,6 +48,11 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 regex : "<\\!--",
                 next : "comment"
             }, {
+                token : "comment",
+                regex : "<nowiki>",
+                merge : true,
+                next : "nowiki"
+            }, {
                 // External links [ ... ]
                 token : "externallink",
                 regex : "\\[[^\\[\\]]*\\]"
@@ -102,6 +107,16 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
             {
                 token : "comment",
                 regex : ".*?-->",
+                next : "start"
+            }, {
+                token : "comment",
+                merge : true,
+                regex : ".+"
+            }],
+        nowiki : [ 
+            {
+                token : "comment",
+                regex : ".*?</nowiki>",
                 next : "start"
             }, {
                 token : "comment",
