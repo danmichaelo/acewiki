@@ -56,8 +56,16 @@ context.evt = $.extend( context.evt, {
 	}
 } );
 
-var cookieEnabled = $.cookie('wikiEditor-' + context.instance + '-aceWikiEditor-enabled');
-context.aceWikiEditorActive = (cookieEnabled !== '0');
+// Enable? Restore from cookie and check for old IE
+var isEnabled = ($.cookie('wikiEditor-' + context.instance + '-aceWikiEditor-enabled') !== '0');
+if ($.browser.msie && parseFloat($.browser.version.slice(0,3)) <= 9.0) {
+    // Disable by default for IE <= 9
+    isEnabled = false;
+}
+context.aceWikiEditorActive = isEnabled;
+
+// Restore fontsize
+context.aceWikiEditorFontsize = $.cookie('wikiEditor-' + context.instance + '-aceWikiEditor-fontsize');
 
 /**
  * Internally used functions
@@ -70,24 +78,30 @@ context.fn = $.extend( context.fn, {
 	},
 	'setupAceWikiEditorToolbar': function() {
 		var callback = function( context ) {
-			context.aceWikiEditorActive = !context.aceWikiEditorActive;
-			$.cookie(
-				'wikiEditor-' + context.instance + '-aceWikiEditor-enabled',
-				context.aceWikiEditorActive ? '1' : '0',
-				{ expires: 30, path: '/' }
-			);
-			context.fn.toggleAceWikiEditorToolbar();
+			    context.aceWikiEditorActive = !context.aceWikiEditorActive;
 
-			if (context.aceWikiEditorActive) {
-				// set it back up!
-				context.fn.setupAceWikiEditor();
-			} else {
-				context.fn.disableAceWikiEditor();
-			}
-		};
-		
-		var setFontSize = function (context, size) {		
+                $.cookie(
+                    'wikiEditor-' + context.instance + '-aceWikiEditor-enabled',
+                    context.aceWikiEditorActive ? '1' : '0',
+                    { expires: 30, path: '/' }
+                );
+                context.fn.toggleAceWikiEditorToolbar();
+        
+                if (context.aceWikiEditorActive) {
+                    // set it back up!
+                    context.fn.setupAceWikiEditor();
+                } else {
+                    context.fn.disableAceWikiEditor();
+                }
+            },
+	
+		setFontSize = function (context, size) {		
 		    if (context.aceWikiEditor) {
+                $.cookie(
+                    'wikiEditor-' + context.instance + '-aceWikiEditor-fontsize',
+                    size,
+                    { expires: 30, path: '/' }
+                );
 		        context.aceWikiEditor.setFontSize(size);
 		    }
 		};
@@ -151,30 +165,31 @@ context.fn = $.extend( context.fn, {
                     }
                 }
             }
-        })
+        });
                 
 		
 	},
 	'toggleAceWikiEditorToolbar': function() {
-		var target = 'img.tool[rel=aceWikiEditor]';
-		var $img = context.modules.toolbar.$toolbar.find( target );
+		var target = 'img.tool[rel=aceWikiEditor]',
+		    $img = context.modules.toolbar.$toolbar.find( target );
 		$img.attr('src', context.fn.aceWikiEditorToolbarIcon());
 	},
+	
 	/**
 	 * Sets up the iframe in place of the textarea to allow more advanced operations
 	 */
 	'setupAceWikiEditor': function() {
-		var box = context.$textarea;
-
-		var matches = /\.(js|css)$/.exec(mw.config.get('wgTitle'));
-		if (!matches) {
-			var lang = 'wiki';
 
 			// Ace doesn't like replacing a textarea directly.
 			// We'll stub this out to sit on top of it...
 			// line-height is needed to compensate for oddity in WikiEditor extension, which zeroes the line-height on a parent container
-			var container = context.$aceWikiEditorContainer = $('<div style="position: relative"><div class="editor" style="line-height: 1.5em; top: 0px; left: 0px; right: 0px; bottom: 0px; border: 1px solid gray"></div></div>').insertAfter(box);
-			var editdiv = container.find('.editor');
+		    var box = context.$textarea,
+		        container = context.$aceWikiEditorContainer = $('<div style="position: relative"><div class="editor" style="line-height: 1.5em; top: 0px; left: 0px; right: 0px; bottom: 0px; border: 1px solid gray"></div></div>').insertAfter(box),
+			    editdiv = container.find('.editor'),
+		        lang = 'wiki',
+		        resize = function() {
+				    container.width(box.width());
+			    };
 
 			box.css('display', 'none');
 			container.width(box.width())
@@ -205,9 +220,6 @@ context.fn = $.extend( context.fn, {
             context.aceWikiEditor.renderer.setHScrollBarAlwaysVisible(false);
 
 			// Force the box to resize horizontally to match in future :D
-			var resize = function() {
-				container.width(box.width());
-			};
 			$(window).resize(resize);
 			// Use jquery.ui.resizable so user can make the box taller too
 			container.resizable({
@@ -219,7 +231,7 @@ context.fn = $.extend( context.fn, {
 			});
 
 			context.fn.trigger( 'ready' );
-		}
+
 	},
 
 	/*
@@ -257,9 +269,9 @@ var saveAndExtend = function( base, extended ) {
 	// $.map doesn't handle objects in jQuery < 1.6; need this for compat with MW 1.17
 	var map = function( obj, callback ) {
 	    var key;
-		for ( key in extended ) {
-			if ( obj.hasOwnProperty( key ) ) {
-				callback( obj[key], key );
+		for (key in extended) {
+			if (obj.hasOwnProperty(key)) {
+				callback(obj[key], key);
 			}
 		}
 	};
@@ -411,11 +423,14 @@ saveAndExtend( context.fn, {
 } );
 
 /* Setup the editor */
-context.fn.setupAceWikiEditorToolbar();
-if (context.aceWikiEditorActive) {
-	context.fn.setupAceWikiEditor();
+var matches = /\.(js|css)$/.exec(mw.config.get('wgTitle'));
+if (!matches) {
+    context.fn.setupAceWikiEditorToolbar();
+    if (context.aceWikiEditorActive) {
+        context.fn.setupAceWikiEditor();
+    }
 }
 
 };
 
-})( jQuery, mediaWiki );
+}(jQuery, mediaWiki));
