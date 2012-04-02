@@ -1,5 +1,5 @@
 /**
- * MediaWiki:Gadget-acewikieditor.js
+ * MediaWiki:Gadget-aceWikiEditor.js
  * 2012 Dan Michael Heggø <danmichaelo+wikipedia @ gmail.com>
  * 
  * Forked from MediaWiki:Gadget-codeeditor.js
@@ -35,5 +35,10 @@
 
 $( document ).ready( function() {
 	// Add code editor module
-	$( '#wpTextbox1' ).wikiEditor( 'addModule', 'aceWikiEditor' );
+
+	if ($.wikiEditor !== undefined) {
+	    // no support for old editor, so we should not load 
+	    $( '#wpTextbox1' ).wikiEditor( 'addModule', 'aceWikiEditor' );
+	}
+	
 } );
