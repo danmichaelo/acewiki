@@ -64,7 +64,7 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 regex : "<ref[^<>]*?/>",
             }, {
                 token : "meta.tag",
-                regex : "<ref.*?>",
+                regex : "<ref[^<>]*?>",
                 merge : true,
                 next : "ref"
             }, {
@@ -86,7 +86,7 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
         ref : [
          {
                 token : "meta.tag",
-                regex : ".*</ref>",
+                regex : ".*?</ref>",
                 next : "start"
             }, {
                 token : "meta.tag",
