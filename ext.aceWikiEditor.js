@@ -35,10 +35,5 @@
 
 $( document ).ready( function() {
 	// Add code editor module
-
-	if ($.wikiEditor !== undefined) {
-	    // no support for old editor, so we should not load 
-	    $( '#wpTextbox1' ).wikiEditor( 'addModule', 'aceWikiEditor' );
-	}
-	
+	$( '#wpTextbox1' ).wikiEditor( 'addModule', 'aceWikiEditor' );
 } );
