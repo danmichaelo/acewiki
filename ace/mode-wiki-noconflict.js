@@ -52,6 +52,9 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 merge : true,
                 next : "nowiki"
             }, {
+                token : "specialchar",
+                regex : "[– ]"
+            }, {
                 // External links [ ... ]
                 token : "externallink",
                 regex : "\\[[^\\[\\]]*\\]"
@@ -61,9 +64,6 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
             }, {
                 token : "meta.tag",
                 regex : "<ref[^<>]*?/>"
-            }, {
-                token : "specialchar",
-                regex : "–"
             }, {
                 token : "meta.tag",
                 regex : "<ref[^<>]*?>",
@@ -146,19 +146,25 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 regex : "}}",
                 next : "start"
             }, {
+                token : "specialchar",
+                regex : "[– ]"
+            }, {
                 token : "template",
                 merge : true,
-                regex : "[^{}]+"
+                regex : "[^{}– ]+"
             }],
         subtemplate : [ 
             {
                 token : "template.sub",
-                regex : ".*?}}",
+                regex : "[^– ]*?}}",
                 next : "template"
+            }, {
+                token : "specialchar",
+                regex : "[– ]"
             }, {
                 token : "template.sub",
                 merge : true,
-                regex : ".+"
+                regex : "[^– ]+"
             }]
     };
 
