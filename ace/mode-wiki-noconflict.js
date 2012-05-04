@@ -1,5 +1,4 @@
 
-
 ace.define('ace/mode/wiki', function(require, exports, module) {
 
   var oop = require("ace/lib/oop");
@@ -61,7 +60,10 @@ ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
                 regex: "^==.*==\\s*$"
             }, {
                 token : "meta.tag",
-                regex : "<ref[^<>]*?/>",
+                regex : "<ref[^<>]*?/>"
+            }, {
+                token : "specialchar",
+                regex : "–"
             }, {
                 token : "meta.tag",
                 regex : "<ref[^<>]*?>",

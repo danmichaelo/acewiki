@@ -125,6 +125,11 @@ exports.cssText = "\
   background: #FFFBD1;\
 }\
 \
+.ace-wiki .ace_specialchar {\
+  color: #00AA00;\
+      background-color:#dddddd;\
+}\
+\
 .ace-wiki .ace_comment {\
   color:#8E908C;\
 }\
