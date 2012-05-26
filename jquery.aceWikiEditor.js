@@ -82,11 +82,14 @@ context.fn = $.extend( context.fn, {
 
 	    if ($('#wpPreview').data('events') != undefined && 'click' in $('#wpPreview').data('events') && $('#wpPreview').data('events').click.length == 1) {
             // Seems like live preview is enabled
+            // https://gerrit.wikimedia.org/r/gitweb?p=mediawiki/core.git;a=blob;f=skins/common/preview.js
             mw.log('aceWikiEditor using live preview');
             $('#wpPreview').unbind('click');
             $('#wpPreview').on('click', function(e) {
+                e.preventDefault();
                 mw.log('aceWikiEditor got live preview call');
                 context.$textarea.val( context.$textarea.textSelection( 'getContents' ) );
+                doLivePreview(e);
             });
         }
 
