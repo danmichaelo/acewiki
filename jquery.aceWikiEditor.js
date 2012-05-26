@@ -78,7 +78,17 @@ context.fn = $.extend( context.fn, {
 	},
 	'setupAceWikiEditorToolbar': function() {
 
-	    mw.log(mw.loader.getState('mediawiki.legacy.preview'));
+	    mw.log('aceWikiEditor mediawiki.legacy.preview state: ' + mw.loader.getState('mediawiki.legacy.preview')); // 'registered' when off, 'ready' when on (but it could be in some not-yet-loaded state too at this point?)
+
+	    if ($('#wpPreview').data('events') != undefined && 'click' in $('#wpPreview').data('events') && $('#wpPreview').data('events').click.length == 1) {
+            // Seems like live preview is enabled
+            mw.log('aceWikiEditor using live preview');
+            $('#wpPreview').unbind('click');
+            $('#wpPreview').on('click', function(e) {
+                mw.log('aceWikiEditor got live preview call');
+                context.$textarea.val( context.$textarea.textSelection( 'getContents' ) );
+            });
+        }
 
 		var callback = function( context ) {
 			    context.aceWikiEditorActive = !context.aceWikiEditorActive;
@@ -114,7 +124,8 @@ context.fn = $.extend( context.fn, {
 			'group': 'format',
 			'tools': {
 				'aceWikiEditor': {
-					'labelMsg': 'acewikieditor-toolbar-toggle',
+					//'labelMsg': 'acewikieditor-toolbar-toggle',
+					'label': 'Skru aceWikiEditor på/av',
 					'type': 'button',
 					'icon': context.fn.aceWikiEditorToolbarIcon(),
 					'action': {
