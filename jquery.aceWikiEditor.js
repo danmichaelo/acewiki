@@ -77,6 +77,9 @@ context.fn = $.extend( context.fn, {
 		return iconPath + (context.aceWikiEditorActive ? 'code-selected.png' : 'code.png');
 	},
 	'setupAceWikiEditorToolbar': function() {
+
+	    mw.log(mw.loader.getState('mediawiki.legacy.preview'));
+
 		var callback = function( context ) {
 			    context.aceWikiEditorActive = !context.aceWikiEditorActive;
 
