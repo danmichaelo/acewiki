@@ -1,5 +1,5 @@
 
-ace.define('ace/mode/wiki', function(require, exports, module) {
+define('ace/mode/wiki', function(require, exports, module) {
 
   var oop = require("ace/lib/oop");
   var TextMode = require("ace/mode/text").Mode;
@@ -16,7 +16,7 @@ ace.define('ace/mode/wiki', function(require, exports, module) {
 
 
 
-ace.define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
+define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
 
   var oop = require("ace/lib/oop");
   var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
