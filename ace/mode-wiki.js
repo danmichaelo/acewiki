@@ -1,25 +1,24 @@
 
 define('ace/mode/wiki', function(require, exports, module) {
 
-  var oop = require("ace/lib/oop");
-  var TextMode = require("ace/mode/text").Mode;
-  var Tokenizer = require("ace/tokenizer").Tokenizer;
-  var WikiHighlightRules = require("ace/mode/wiki_highlight_rules").WikiHighlightRules;
+  var oop = require("../lib/oop");
+  var TextMode = require("./text").Mode;
+  var Tokenizer = require("../tokenizer").Tokenizer;
+  var WikiHighlightRules = require("./wiki_highlight_rules").WikiHighlightRules;
 
   var Mode = function() {
-     this.$tokenizer = new Tokenizer(new WikiHighlightRules().getRules());
+    var highlighter = new WikiHighlightRules();
+    this.$tokenizer = new Tokenizer(highlighter.getRules());
   };
   oop.inherits(Mode, TextMode);
   
   exports.Mode = Mode;
 });
 
+define('ace/mode/wiki_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
 
-
-define('ace/mode/wiki_highlight_rules', function(require, exports, module) {
-
-  var oop = require("ace/lib/oop");
-  var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+  var oop = require("../lib/oop");
+  var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
   var WikiHighlightRules = function() {
 
